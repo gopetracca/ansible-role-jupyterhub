@@ -1,0 +1,50 @@
+---
+
+
+- name: Install dependency | "configurable-http-proxy" node.js package globally.
+  npm:
+    name: configurable-http-proxy@4.1.0
+    global: yes
+  tags:
+    - jupyter
+
+- name: Install dependency | openssl
+  yum:
+    name: 
+      - openssl-devel
+      - git
+      - python36
+      - python36-pip
+      - python36-devel
+    state: present
+
+
+- name: Install python dependencies 
+  pip:
+    executable: pip3.6
+    name: 
+      - notebook
+      - jupyterhub
+    state: present
+  register: result
+  until: result|succeeded
+  retries: 5
+  delay: 10
+#   tags:
+#     - jupyter
+
+
+- name: Configurar JupyterHub
+  block:
+    # - file: path={{anaconda_link_dir}}/share/jupyter/kernels/pyspark state=directory
+    # - copy: src=roles/jupyter/config/pyspark_kernel.json dest={{anaconda_link_dir}}/share/jupyter/kernels/pyspark/kernel.json
+    - copy: src=roles/jupyter/templates/jupyterhub.service.j2 dest=/lib/systemd/system/jupyterhub.service
+    # - shell: PATH={{anaconda_link_dir}}/bin':'$PATH nohup jupyterhub --Spawner.notebook_dir='/home/' &>/var/log/jupyterhub.log &
+    #&>/var/log/jupyterhub.log &
+
+- name: Iniciar servicio JupyterHub
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+    name: jupyterhub

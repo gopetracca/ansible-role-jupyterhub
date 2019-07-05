@@ -1,0 +1,14 @@
+[Unit]
+Description=Jupyterhub
+Requires=network.target
+After=syslog.target network.target
+[Service]
+Environment="PATH=/usr/local/lib/npm/bin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin"
+ExecStart=/usr/local/bin/jupyterhub --Spawner.notebook_dir='/home/' &
+WorkingDirectory=/usr/local/share/jupyterhub/
+User=root
+PIDFile=/run/jupyterhub.pid
+Restart=always
+RestartSec=5
+[Install]
+WantedBy=multi-user.target
