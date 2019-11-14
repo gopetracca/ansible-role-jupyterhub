@@ -1,0 +1,20 @@
+{
+ "display_name": "pyspark-cluster",
+ "language": "python",
+ "argv": [
+  "/usr/bin/python3",
+  "-m",
+  "ipykernel",
+  "-f",
+  "{connection_file}"
+ ],
+ "env": {
+  "JAVA_HOME": "/usr/jdk64/jdk1.8.0_60/",
+  "SPARK_HOME": "/usr/hdp/3.0.1.0-187/spark2",
+  "HADOOP_CONF_DIR": "/etc/hadoop/conf",
+  "PYTHONPATH": "/usr/hdp/current/spark2-client/python/:/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip",
+  "PYTHONSTARTUP": "/usr/hdp/3.0.1.0-187/spark2/python/pyspark/shell.py",
+  "PYSPARK_PYTHON": "/usr/bin/python3",
+  "PYSPARK_SUBMIT_ARGS": "--conf spark.port.maxRetries=35 --master yarn pyspark-shell"
+ }
+}

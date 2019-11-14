@@ -33,11 +33,17 @@
 #   tags:
 #     - jupyter
 
+- name: Modificación de permisos de /etc/shadow para permitir autenticación por PAM
+  file:
+    path: /etc/shadow
+    mode: 0444
+
 
 - name: Configurar JupyterHub
   block:
     # - file: path={{anaconda_link_dir}}/share/jupyter/kernels/pyspark state=directory
     # - copy: src=roles/jupyter/config/pyspark_kernel.json dest={{anaconda_link_dir}}/share/jupyter/kernels/pyspark/kernel.json
+    - copy: src=roles/jupyter/templates/jupyterhub_config.py.j2 dest=/usr/local/share/jupyterhub/jupyterhub_config.py
     - copy: src=roles/jupyter/templates/jupyterhub.service.j2 dest=/lib/systemd/system/jupyterhub.service
     # - shell: PATH={{anaconda_link_dir}}/bin':'$PATH nohup jupyterhub --Spawner.notebook_dir='/home/' &>/var/log/jupyterhub.log &
     #&>/var/log/jupyterhub.log &
